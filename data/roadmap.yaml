@@ -1,0 +1,1065 @@
+# Single source of truth for the plan's content. Validated at build time by src/lib/roadmap.ts.
+# Rules:
+# - ids never change once published: saved progress references them.
+# - verified_on: set only when checked against a primary or first-party page.
+# - license: link-only for non-commercial repos. Link to them, never copy their content.
+# - Personal progress never goes here. It lives in Supabase (or localStorage in demo mode).
+
+meta:
+  name: Learning Hub # the app's name: header, browser tab, About page
+  title: AI Architect 60-Day Plan # the plan's name
+  start_date: 2026-09-28 # default; each user can change it in Settings
+  days: 60
+  hours: { learn: 45, build: 65, interview: 35 }
+  budget_cap_usd: 20
+  repo: https://github.com/daredavil01/learning-hub
+  plan_doc: AI Architect 60-Day Plan — Consolidated.md # path in the repo
+
+# The "Created by" page. Forks: replace with your own details.
+author:
+  name: Sanket Tambare
+  role: Software developer · full stack and data
+  bio:
+    - Hi, I'm Sanket. I like to build things. I'm a software developer specialising in full-stack development and data analysis, currently at Bridgenext India.
+    - "Five years across React, Next.js, GraphQL, FastAPI and Spring Boot, plus Databricks, Snowflake, AWS Lambda, Terraform and Linux (RHCSA). This hub is how I'm working towards senior AI roles, in public: every week's learning, builds and interview prep live here."
+    - Away from the keyboard I run ultra-marathons and trek forts. I write weekly about technology, society and public policy in my Substack, The Wanderer's Technical Anecdotes, host Dare Write's, a podcast on books, technology and travel, and read in both English and Marathi.
+  links:
+    - { label: Portfolio, url: "https://sankettambare.in", note: "Writing, projects, books, races and treks" }
+    - { label: Projects, url: "https://sankettambare.in/projects", note: Everything I've built }
+    - { label: Resume, url: "https://sankettambare.in/resume" }
+    - { label: Runfolio, url: "https://runfolio.sankettambare.in", note: Running portfolio with RunCoach AI (Core 2) }
+    - { label: Substack, url: "https://sankettambare.substack.com/", note: "The Wanderer's Technical Anecdotes" }
+    - { label: GitHub, url: "https://github.com/daredavil01" }
+    - { label: LinkedIn, url: "https://www.linkedin.com/in/sankettambare/" }
+    - { label: Now, url: "https://sankettambare.in/now", note: What I'm focused on right now }
+    - { label: Contact, url: "https://sankettambare.in/contact" }
+
+# The About page.
+about:
+  intro: In 60 days, become interview-ready for senior AI roles at product companies and GCCs. The target role blends Applied AI / LLM Engineer, GenAI Solutions Architect and Data + AI Platform Architect.
+  constraints:
+    - { label: Time, value: "2 h weekdays, 3–4 h weekends ≈ 17 h/week ≈ 145 h total" }
+    - { label: Budget, value: "At most $20/month for LLM APIs and cloud" }
+    - { label: Output, value: "Four upgraded portfolio projects and this public, forkable hub" }
+    - { label: Fixed date, value: "Khadakwasla Ultra on day 56; days 55–56 are rest" }
+  tracks:
+    learn: One lecture, chapter, essay or course module at a time. Finish the Must resources; use the rest as references.
+    build: One project at a time. Build carries the most weight, because product-company interviews probe what you shipped and measured.
+    interview: System design, low-level design, a little DSA, mocks and a bank of STAR stories.
+  rhythm:
+    weekdays:
+      - "50 min learn: one lecture, chapter, essay or course module"
+      - "55 min build. On Tue and Thu, 30 of these minutes go to DSA"
+      - "15 min capture: log what you learned in the hub"
+    weekends:
+      - 2–2.5 h deep build block
+      - "45 min interview practice: one design or LLD problem, written up in the hub"
+      - "30 min weekly review: update progress, read your 3–4 sources, write a short weekly note"
+
+# Phases in day order. The entry with race: true can be skipped per user;
+# the phase before it then runs to the race's last day.
+# Build details: project (a projects id), build_steps (ordered, tickable; append new steps
+# at the end so saved ticks keep matching) and build_links (references for the build).
+weeks:
+  - id: w1
+    number: 1
+    short: W1
+    start: 1
+    end: 7
+    title: How LLMs work + APIs
+    learn: Tokens, attention, sampling, context windows; LLM APIs
+    build: Learning hub v0, timeboxed to 6 h
+    build_sub: Astro, roadmap.yaml, lychee link checks, Cloudflare deploy
+    interview: OOP and SOLID; DSA arrays and hashing
+    dsa: arrays and hashing
+    build_steps:
+      - Scaffold Astro with one React island; add the Organic design system styles
+      - Seed data/roadmap.yaml from the plan (weeks, resources, checkpoints) and validate it with Zod at build time
+      - "Create a Supabase project: progress table with row-level security, email + password sign-in"
+      - "Add CI: tests and build on every pull request, weekly lychee link check"
+      - Deploy to Cloudflare and point learn.sankettambare.in at it
+      - Write the week 1 log in the hub (checkpoint, day 7)
+    build_links:
+      - { label: Astro docs, url: "https://docs.astro.build" }
+      - { label: Supabase row-level security, url: "https://supabase.com/docs/guides/database/postgres/row-level-security" }
+      - { label: lychee-action, url: "https://github.com/lycheeverse/lychee-action" }
+      - { label: Cloudflare static assets, url: "https://developers.cloudflare.com/workers/static-assets/" }
+  - id: w2
+    number: 2
+    short: W2
+    start: 8
+    end: 14
+    title: Prompting, outputs, embeddings, evals
+    learn: Prompting, structured outputs, embeddings, evals methodology; start cost logging
+    build: "Core 1: audit the portfolio RAG, label a 40–50 question eval set"
+    build_sub: "Label each question: factual, multi-hop, not in corpus, adversarial. Log tokens and cost per request."
+    interview: Design patterns (strategy, factory, observer, adapter); DSA two pointers, sliding window
+    dsa: two pointers and sliding window
+    project: core-1
+    build_steps:
+      - "Map the current \"Ask Sanket\" pipeline: chunking, embedding model, vector store, prompt, LLM"
+      - Log tokens, latency and cost for every request (cost logging starts this week)
+      - Pull 15–20 real questions from logs, then write more to reach 40–50
+      - "Label each question by type: factual, multi-hop, not in corpus, adversarial"
+      - Write the expected answer and the source chunk for every question
+      - Run v1 over the set and do error analysis on the failures before changing any code
+      - Commit the eval set and the v1 baseline numbers (checkpoint, day 14)
+    build_links:
+      - { label: AI Evals FAQ, url: "https://hamel.dev/blog/posts/evals-faq/" }
+      - { label: Prompt evaluations course, url: "https://github.com/anthropics/courses" }
+      - { label: Instructor, url: "https://python.useinstructor.com" }
+  - id: w3
+    number: 3
+    short: W3
+    start: 15
+    end: 21
+    title: RAG core
+    learn: Chunking, pgvector, hybrid BM25 + vector, reranking, query rewriting
+    build: "Core 1: RAG v2, measured against v1"
+    build_sub: Hybrid search with RRF fusion, cross-encoder reranking, then rerun the eval set
+    interview: Load balancing, caching, replication, sharding
+    dsa: stack
+    project: core-1
+    build_steps:
+      - Add a full-text (tsvector) index next to the pgvector index
+      - "Hybrid query: fuse keyword and vector results with reciprocal rank fusion (RRF) in SQL"
+      - Add a cross-encoder reranker (bge-reranker on CPU) over the top 20–50 results
+      - Rewrite vague or multi-part questions before retrieval
+      - Hash each chunk so re-embedding only touches changed content
+      - Rerun the eval set and compare v2 with v1 on recall@k and answer accuracy
+    build_links:
+      - { label: Supabase hybrid search, url: "https://supabase.com/docs/guides/ai/hybrid-search" }
+      - { label: pgvector, url: "https://github.com/pgvector/pgvector" }
+      - { label: bge-reranker-v2-m3, url: "https://huggingface.co/BAAI/bge-reranker-v2-m3" }
+      - { label: RAG_Techniques (link only), url: "https://github.com/NirDiamant/RAG_Techniques" }
+  - id: w4
+    number: 4
+    short: W4
+    start: 22
+    end: 28
+    title: Advanced RAG + RAG evals
+    learn: Contextual retrieval, citations, LLM-as-judge calibration; 3 h GraphRAG spike
+    build: "Core 1: eval report on 3+ configurations, with claim-level checks"
+    build_sub: Split answers into claims and verify each against its cited chunk
+    interview: "GenAI drill: RAG over 10M documents with access control"
+    dsa: heap
+    project: core-1
+    build_steps:
+      - "Contextual retrieval: prepend a short context to each chunk before embedding and BM25"
+      - Cite chunk ids in every answer; refuse when the answer is not in the corpus
+      - "Claim-level checks: split each answer into claims and verify every claim against its cited chunk"
+      - Calibrate the LLM judge against 30+ of your own labels; keep scores binary
+      - Cache judge outputs by a hash of (input, output, judge prompt) to protect the budget
+      - "Compare 3+ configurations: faithfulness, context precision and recall, p95 latency, cost per query"
+      - Publish the eval report and ship Core 1 live (checkpoint, day 28)
+      - "Optional: 3 h GraphRAG spike with neo4j-graphrag-python"
+    build_links:
+      - { label: Contextual Retrieval, url: "https://www.anthropic.com/engineering/contextual-retrieval" }
+      - { label: LLM-as-a-Judge guide, url: "https://hamel.dev/notes/llm/evals/" }
+      - { label: Ragas, url: "https://docs.ragas.io" }
+      - { label: neo4j-graphrag-python, url: "https://github.com/neo4j/neo4j-graphrag-python" }
+  - id: w5
+    number: 5
+    short: W5
+    start: 29
+    end: 35
+    title: Agents, MCP, context engineering, security
+    learn: Agents, tool design, MCP 2026-07-28, context engineering, prompt injection, tool permissions
+    build: "Core 2: upgrade RunCoach AI with an MCP server and approval step"
+    build_sub: "Map each tool to OWASP agentic risks: tool misuse, privilege abuse"
+    interview: Queues, async, rate limiting, idempotency
+    dsa: trees
+    project: core-2
+    build_steps:
+      - "List the tools RunCoach needs: read runs, read the plan, propose a plan change, apply a change"
+      - Build an MCP server for training data against the 2026-07-28 spec with the official Python SDK
+      - Split read tools from write tools; every write waits for your approval
+      - Add idempotency keys to every write and scope credentials per tool
+      - "Map each tool to OWASP agentic risks (goal hijack, tool misuse, privilege abuse) and add a defence for each"
+      - Red-team prompt injection through run notes and retrieved text
+    build_links:
+      - { label: MCP spec 2026-07-28, url: "https://blog.modelcontextprotocol.io/posts/2026-07-28/" }
+      - { label: MCP reference servers, url: "https://github.com/modelcontextprotocol/servers" }
+      - { label: Hugging Face MCP Course, url: "https://huggingface.co/learn/mcp-course" }
+      - { label: OWASP Agentic Top 10, url: "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/" }
+  - id: w6
+    number: 6
+    short: W6
+    start: 36
+    end: 42
+    title: Frameworks, human-in-the-loop, tracing
+    learn: Agent frameworks, human-in-the-loop, tracing, agent evals, multi-agent
+    build: "Core 2: tracing, agent evals, cost per conversation"
+    build_sub: Langfuse traces, trajectory evals, 2-minute demo video
+    interview: "LLD: parking lot, rate limiter, LRU cache"
+    dsa: graphs and BFS
+    project: core-2
+    build_steps:
+      - Multi-step planning with LangGraph; an interrupt pauses for your approval before any change
+      - "Trace every step in Langfuse: prompts, tool calls, tokens, cost, latency"
+      - "Build an agent eval set: trajectories, tool choice and final answers"
+      - Report cost per conversation and p95 latency
+      - Record a 2-minute demo video (checkpoint, day 42)
+    build_links:
+      - { label: LangChain Academy (LangGraph), url: "https://github.com/langchain-ai/langchain-academy" }
+      - { label: Langfuse docs, url: "https://langfuse.com/docs" }
+      - { label: Evaluating AI Agents, url: "https://www.deeplearning.ai/courses/evaluating-ai-agents" }
+  - id: w7
+    number: 7
+    short: W7
+    start: 43
+    end: 49
+    title: Data + AI platform
+    learn: Databricks deep (Vector Search, Mosaic AI Agent Framework, MLflow, Unity Catalog); Snowflake light (Cortex Analyst)
+    build: "Core 3: document ingestion → lakehouse → RAG + text-to-SQL"
+    build_sub: Start the Snowflake trial on day 43. Text-to-SQL accuracy on 20 questions.
+    interview: "GenAI drill: enterprise assistant with access control"
+    dsa: intervals
+    project: core-3
+    build_steps:
+      - Parse the E20 and Dividend Question PDFs and reports with Docling
+      - Extract typed JSON with a confidence score (Instructor + Pydantic); send low-confidence rows to review
+      - Land raw, parsed and extracted data as Delta tables in Unity Catalog
+      - Add Databricks Vector Search over the chunks (Free Edition allows one endpoint)
+      - Start the Snowflake trial on day 43 and build a Cortex Analyst semantic model
+      - "Text-to-SQL: compare the semantic model with a hand-written schema prompt on 20 questions"
+      - Draw the architecture diagram and write the README (checkpoint, day 49)
+    build_links:
+      - { label: Docling, url: "https://github.com/docling-project/docling" }
+      - { label: Databricks Free Edition limits, url: "https://docs.databricks.com/aws/en/getting-started/free-edition-limitations" }
+      - { label: Cortex Analyst quickstart, url: "https://github.com/Snowflake-Labs/sfguide-getting-started-with-cortex-analyst" }
+      - { label: MLflow GenAI, url: "https://mlflow.org/docs/latest/genai/" }
+  - id: w8
+    number: 8
+    short: W8
+    start: 50
+    end: 54
+    title: LLMOps, security, cost
+    learn: Routing, semantic cache, cost/latency budgets, inference basics, OWASP LLM and Agentic Top 10 2026
+    build: "Core 4: LLM gateway, then load-test Core 1 or 2 through it"
+    build_sub: Routing, fallbacks, semantic cache, budgets, PII redaction; k6 load test
+    interview: "3 mocks: GenAI design, classic design, LLD"
+    dsa: mixed review
+    project: core-4
+    build_steps:
+      - Thin FastAPI gateway with one OpenAI-compatible endpoint in front of two or more providers
+      - Routing and fallbacks, with timeouts and retries
+      - Per-project budgets and a spend ledger; reject calls over budget
+      - Semantic cache keyed on model, prompt version and user scope
+      - Redact PII with Presidio before a request leaves the gateway
+      - Cost dashboard; route Core 1 or Core 2 through the gateway
+      - "k6 load test: p95 latency, time to first token, 429 behaviour (checkpoint, day 54)"
+    build_links:
+      - { label: LiteLLM (pin versions), url: "https://github.com/BerriAI/litellm" }
+      - { label: Portkey gateway, url: "https://github.com/Portkey-AI/gateway" }
+      - { label: Microsoft Presidio, url: "https://microsoft.github.io/presidio/" }
+      - { label: Grafana k6, url: "https://grafana.com/docs/k6/latest/" }
+  - id: race
+    race: true
+    event: Khadakwasla Ultra
+    short: Race
+    start: 55
+    end: 56
+    title: Rest + Khadakwasla Ultra
+    learn: Rest
+    build: "—"
+    interview: Khadakwasla Ultra on day 56
+  - id: final
+    short: Final
+    start: 57
+    end: 60
+    title: Final days
+    learn: Light revision from your own hub notes
+    build: Polish READMEs, demo videos, resume
+    build_sub: README, architecture diagram, eval numbers and demo for all four projects
+    interview: 4th mock (behavioural); STAR story bank of 8 stories
+    build_steps:
+      - Write each project's README with the 5-part template (Projects page)
+      - Add an architecture diagram and before/after eval numbers to every README
+      - Record a 2-minute demo video for each project
+      - Update the resume and portfolio with links and numbers
+      - Turn eval results into STAR stories; reach 8 by day 60
+    build_links:
+      - { label: Tech Interview Handbook, url: "https://www.techinterviewhandbook.org" }
+
+# category drives the Resources filter: video | course | docs | book | essay | repo | tool | standard
+# type is the display label when it differs from the category.
+# priority: must | recommended | optional. Must items also feed the weekday learn blocks.
+resources:
+  # Week 1
+  - id: karpathy-deep-dive
+    week: w1
+    title: Karpathy — Deep Dive into LLMs like ChatGPT
+    url: https://www.youtube.com/watch?v=7xTGNNLPyMI
+    category: video
+    cost: Free
+    time: 3.5 h
+    priority: must
+    verified_on: 2026-09-25
+    why: "Full stack in one talk: data, tokenization, transformer, sampling, SFT, RL, hallucinations, tool use"
+  - id: 3b1b-transformers
+    week: w1
+    title: 3Blue1Brown — transformer and attention chapters
+    url: https://www.3blue1brown.com/topics/neural-networks
+    category: video
+    cost: Free
+    time: 1.5 h
+    priority: must
+    why: Clearest visual intuition for attention and embeddings
+  - id: anthropic-courses-api
+    week: w1
+    title: anthropics/courses — API fundamentals
+    url: https://github.com/anthropics/courses
+    category: course
+    type: Notebooks
+    cost: ~$1–2 API
+    time: 2 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Official SDK course; swap the old model IDs for current ones
+  - id: llm-api-docs
+    week: w1
+    title: Anthropic, OpenAI and Gemini API docs
+    url: https://docs.anthropic.com
+    category: docs
+    cost: Free
+    time: 2 h
+    priority: must
+    why: Messages, tool calling, structured output, streaming, prompt caching, batch
+  - id: refactoring-guru
+    week: w1
+    title: Refactoring.Guru — SOLID and design patterns
+    url: https://refactoring.guru
+    category: docs
+    cost: Free
+    time: 2 h
+    priority: must
+    why: "Interview track: SOLID, then the patterns pages"
+  - id: ai-engineering-book
+    week: w1
+    title: Chip Huyen — AI Engineering, ch. 1–2
+    url: https://www.oreilly.com/library/view/ai-engineering/9781098166298/
+    category: book
+    cost: Paid
+    time: 3 h
+    priority: recommended
+    why: The spine of the plan; later chapters cover evals, RAG, agents, fine-tuning, inference
+  - id: karpathy-tokenizer
+    week: w1
+    title: Karpathy — Let's build the GPT Tokenizer
+    url: https://www.youtube.com/watch?v=zduSFxRajkE
+    category: video
+    cost: Free
+    time: 2 h
+    priority: optional
+    why: Only if tokens still feel fuzzy
+
+  # Week 2
+  - id: anthropic-prompt-tutorial
+    week: w2
+    title: Anthropic prompt engineering interactive tutorial
+    url: https://github.com/anthropics/prompt-eng-interactive-tutorial
+    category: course
+    cost: Free
+    time: 3 h
+    priority: must
+    verified_on: 2026-09-25
+    why: 9 chapters with exercises; techniques transfer to all providers
+  - id: anthropic-courses-prompting-evals
+    week: w2
+    title: anthropics/courses — Real world prompting, Prompt evaluations
+    url: https://github.com/anthropics/courses
+    category: course
+    cost: Free
+    time: 3 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Feeds directly into your eval set
+  - id: hamel-evals-faq
+    week: w2
+    title: Hamel Husain & Shreya Shankar — AI Evals FAQ
+    url: https://hamel.dev/blog/posts/evals-faq/
+    category: essay
+    cost: Free
+    time: 3 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Error analysis first, then binary judge scores; the most-cited evals method
+  - id: instructor-structured-outputs
+    week: w2
+    title: Instructor + OpenAI Structured Outputs guide
+    url: https://python.useinstructor.com
+    category: docs
+    cost: Free
+    time: 1.5 h
+    priority: recommended
+    verified_on: 2026-09-25
+    why: Pydantic-typed outputs with retries; reused in Cores 1 and 3
+  - id: sentence-transformers-mteb
+    week: w2
+    title: Sentence-Transformers docs + MTEB leaderboard
+    url: https://huggingface.co/spaces/mteb/leaderboard
+    category: docs
+    cost: Free
+    time: 1 h
+    priority: recommended
+    why: Choosing embedding models; always confirm on your own data
+
+  # Week 3
+  - id: rag-techniques
+    week: w3
+    title: NirDiamant/RAG_Techniques
+    url: https://github.com/NirDiamant/RAG_Techniques
+    category: repo
+    cost: Free
+    time: 3 h
+    priority: must
+    verified_on: 2026-09-25
+    license: link-only
+    why: "Broadest runnable catalogue. Non-commercial license: link, never copy"
+  - id: supabase-hybrid-search
+    week: w3
+    title: Supabase pgvector + hybrid search docs
+    url: https://supabase.com/docs/guides/ai/hybrid-search
+    category: docs
+    cost: Free
+    time: 2 h
+    priority: must
+    why: Your exact stack; RRF fusion of full-text and vector search in SQL
+  - id: system-design-primer
+    week: w3
+    title: system-design-primer + ByteByteGo
+    url: https://github.com/donnemartin/system-design-primer
+    category: repo
+    cost: Free
+    time: 4 h
+    priority: must
+    verified_on: 2026-09-25
+    why: "Interview track: load balancing, caching, replication, sharding"
+  - id: rerankers
+    week: w3
+    title: "Rerankers: bge-reranker or Cohere Rerank"
+    url: https://huggingface.co/BAAI/bge-reranker-v2-m3
+    category: tool
+    type: Model
+    cost: Free tier
+    time: 1 h
+    priority: recommended
+    why: Cross-encoder reranking; bge runs on CPU for a small corpus
+  - id: ai-engineering-ch6
+    week: w3
+    title: AI Engineering, ch. 6
+    url: https://www.oreilly.com/library/view/ai-engineering/9781098166298/
+    category: book
+    cost: Paid
+    time: 2 h
+    priority: recommended
+    why: Term-based vs embedding retrieval trade-offs
+  - id: ddia-ch5-6
+    week: w3
+    title: Kleppmann — Designing Data-Intensive Applications, ch. 5–6
+    url: https://dataintensive.net
+    category: book
+    cost: Paid
+    time: 3 h
+    priority: optional
+    why: Depth on replication and partitioning
+
+  # Week 4
+  - id: contextual-retrieval
+    week: w4
+    title: Anthropic — Contextual Retrieval + cookbook
+    url: https://www.anthropic.com/engineering/contextual-retrieval
+    category: essay
+    cost: ~$1–3 API
+    time: 2 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Retrieval failures fall 35% → 49% → 67% with contextual embeddings, BM25, reranking
+  - id: hamel-llm-judge
+    week: w4
+    title: Hamel Husain — LLM-as-a-Judge guide
+    url: https://hamel.dev/notes/llm/evals/
+    category: essay
+    cost: Free
+    time: 1.5 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Calibrate judges against your own labels; powers Core 1 claim checks
+  - id: ragas-or-deepeval
+    week: w4
+    title: Ragas or DeepEval
+    url: https://docs.ragas.io
+    category: tool
+    type: Library
+    cost: Free (OSS)
+    time: 2 h
+    priority: must
+    why: Faithfulness, context precision and recall. Pick one, not both
+  - id: neo4j-graphrag
+    week: w4
+    title: neo4j-graphrag-python
+    url: https://github.com/neo4j/neo4j-graphrag-python
+    category: repo
+    cost: Free
+    time: 3 h spike
+    priority: recommended
+    verified_on: 2026-09-25
+    why: "First-party GraphRAG: KG pipeline, vector + Cypher retrieval"
+  - id: genai-system-design-book
+    week: w4
+    title: Aminian & Sheng — Generative AI System Design Interview
+    url: https://www.shroffpublishers.com/books/9789355424969/
+    category: book
+    cost: ₹1,900
+    time: 3 h
+    priority: recommended
+    verified_on: 2026-09-25
+    why: 7-step framework; RAG and chat-assistant designs (ch. 1, 4, 6)
+  - id: microsoft-graphrag
+    week: w4
+    title: microsoft/graphrag
+    url: https://github.com/microsoft/graphrag
+    category: repo
+    cost: Free*
+    time: 1 h reading
+    priority: optional
+    why: Know the community-summaries idea; indexing is LLM-expensive
+
+  # Week 5
+  - id: anthropic-agent-essays
+    week: w5
+    title: Anthropic Engineering — agents, tools, context engineering
+    url: https://www.anthropic.com/engineering
+    category: essay
+    type: Essays
+    cost: Free
+    time: 2.5 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Workflows vs agents, tool design, context as a finite budget
+  - id: mcp-spec-2026-07-28
+    week: w5
+    title: MCP spec 2026-07-28 release post
+    url: https://blog.modelcontextprotocol.io/posts/2026-07-28/
+    category: docs
+    cost: Free
+    time: 2 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Stateless core; Roots, Sampling and Logging deprecated. Build against this
+  - id: hf-mcp-course
+    week: w5
+    title: Hugging Face MCP Course, units 1–2
+    url: https://huggingface.co/learn/mcp-course
+    category: course
+    cost: Free
+    time: 6–8 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Hands-on servers and clients; stop after unit 2
+  - id: owasp-agentic-top10
+    week: w5
+    title: OWASP Top 10 for Agentic Applications 2026
+    url: https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+    category: standard
+    cost: Free
+    time: 1 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Goal hijack, tool misuse, privilege abuse map onto your MCP tools
+  - id: mcp-servers-registry
+    week: w5
+    title: modelcontextprotocol/servers + MCP Registry
+    url: https://github.com/modelcontextprotocol/servers
+    category: repo
+    cost: Free
+    time: 1.5 h
+    priority: recommended
+    verified_on: 2026-09-25
+    why: Read Filesystem (path allow-listing) and Fetch for input validation
+  - id: code-execution-mcp
+    week: w5
+    title: Anthropic — Code execution with MCP
+    url: https://www.anthropic.com/engineering/code-execution-with-mcp
+    category: essay
+    cost: Free
+    time: 0.5 h
+    priority: recommended
+    verified_on: 2026-09-25
+    why: Why large tool catalogues blow up context
+  - id: stripe-idempotency
+    week: w5
+    title: Stripe — Designing robust APIs with idempotency
+    url: https://stripe.com/blog/idempotency
+    category: essay
+    cost: Free
+    time: 1 h
+    priority: recommended
+    why: "Interview track: idempotency keys; pair with a rate-limiter design"
+
+  # Week 6
+  - id: langgraph-academy
+    week: w6
+    title: LangChain Academy — Introduction to LangGraph
+    url: https://github.com/langchain-ai/langchain-academy
+    category: course
+    cost: Free
+    time: 6 h
+    priority: must
+    verified_on: 2026-09-25
+    why: State, memory and interrupts for approval steps
+  - id: dlai-evaluating-agents
+    week: w6
+    title: DeepLearning.AI — Evaluating AI Agents
+    url: https://www.deeplearning.ai/courses/evaluating-ai-agents
+    category: course
+    type: Short course
+    cost: Free
+    time: 1.5 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Trajectory, router and skill evals
+  - id: langfuse
+    week: w6
+    title: Langfuse
+    url: https://langfuse.com/docs
+    category: tool
+    cost: Free
+    time: 2 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Tracing, datasets, cost per conversation; OpenTelemetry-based
+  - id: awesome-lld
+    week: w6
+    title: ashishps1/awesome-low-level-design
+    url: https://github.com/ashishps1/awesome-low-level-design
+    category: repo
+    cost: Free
+    time: 3 h
+    priority: must
+    why: "LLD: parking lot, LRU cache, rate limiter"
+  - id: agent-sdks
+    week: w6
+    title: Claude Agent SDK and OpenAI Agents SDK docs
+    category: docs
+    cost: Free
+    time: 2 h
+    priority: recommended
+    why: Enough to compare three frameworks; build in one
+  - id: anthropic-multi-agent
+    week: w6
+    title: Anthropic — multi-agent research system
+    url: https://www.anthropic.com/engineering/multi-agent-research-system
+    category: essay
+    cost: Free
+    time: 1 h
+    priority: recommended
+    verified_on: 2026-09-25
+    why: Orchestrator-worker write-up with token cost and evals
+  - id: hf-context-course
+    week: w6
+    title: HF Context Course
+    category: course
+    cost: Free
+    time: 2–3 h
+    priority: optional
+    verified_on: 2026-09-25
+    why: Context engineering in practice
+  - id: ai-agents-for-beginners
+    week: w6
+    title: microsoft/ai-agents-for-beginners
+    url: https://github.com/microsoft/ai-agents-for-beginners
+    category: repo
+    cost: Free
+    time: Reference
+    priority: optional
+    why: Pattern catalogue
+  - id: genai-agents
+    week: w6
+    title: NirDiamant/GenAI_Agents
+    url: https://github.com/NirDiamant/GenAI_Agents
+    category: repo
+    cost: Free
+    time: Reference
+    priority: optional
+    verified_on: 2026-09-25
+    license: link-only
+    why: "Pattern catalogue. Non-commercial license: link, never copy"
+
+  # Week 7
+  - id: databricks-free-limits
+    week: w7
+    title: Databricks Free Edition limitations
+    url: https://docs.databricks.com/aws/en/getting-started/free-edition-limitations
+    category: docs
+    cost: Free
+    time: 0.5 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Serverless only, one vector search endpoint, no Agent Bricks
+  - id: databricks-genai-path
+    week: w7
+    title: Databricks Academy — Generative AI Engineering path
+    category: course
+    cost: Free
+    time: 6 h
+    priority: must
+    why: Vector Search, Agent Framework, MLflow eval, Unity Catalog
+  - id: snowflake-cortex-quickstarts
+    week: w7
+    title: Snowflake Cortex Analyst + Cortex Agent quickstarts
+    url: https://www.snowflake.com/en/developers/guides/getting-started-with-cortex-analyst-in-snowflake/
+    category: course
+    type: Tutorial
+    cost: Trial
+    time: 4 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Semantic model + text-to-SQL; expect small API drift
+  - id: mlflow-genai
+    week: w7
+    title: MLflow 3 GenAI docs
+    url: https://mlflow.org/docs/latest/genai/
+    category: docs
+    cost: Free
+    time: 1.5 h
+    priority: recommended
+    why: Tracing and evals inside the lakehouse
+  - id: dlai-data-agents
+    week: w7
+    title: DeepLearning.AI — Building and Evaluating Data Agents
+    url: https://www.deeplearning.ai/short-courses/building-and-evaluating-data-agents/
+    category: course
+    type: Short course
+    cost: Free
+    time: 1.5 h
+    priority: recommended
+    verified_on: 2026-09-25
+    why: Planning over structured + unstructured data, with evals
+
+  # Week 8
+  - id: owasp-llm-top10-2026
+    week: w8
+    title: OWASP Top 10 for LLM Applications 2026
+    url: https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/
+    category: standard
+    cost: Free
+    time: 2 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Replaces the 2025 list; confirm the order against the PDF
+  - id: litellm
+    week: w8
+    title: BerriAI/litellm
+    url: https://github.com/BerriAI/litellm
+    category: repo
+    cost: Free (OSS)
+    time: 3 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Routing, fallbacks, budgets, spend tracking. Pin versions (1.82.7–1.82.8 were malicious)
+  - id: promptfoo
+    week: w8
+    title: promptfoo
+    url: https://www.promptfoo.dev
+    category: tool
+    type: CLI
+    cost: Free
+    time: 2 h
+    priority: must
+    verified_on: 2026-09-25
+    why: Eval regressions and red-team scans in GitHub Actions
+  - id: portkey-gateway
+    week: w8
+    title: Portkey-AI/gateway
+    url: https://github.com/Portkey-AI/gateway
+    category: repo
+    cost: Free
+    time: 1 h reading
+    priority: recommended
+    verified_on: 2026-09-25
+    why: "TypeScript contrast: config-driven routing and guardrails"
+  - id: k6
+    week: w8
+    title: Grafana k6
+    url: https://grafana.com/docs/k6/latest/
+    category: tool
+    cost: Free
+    time: 1.5 h
+    priority: recommended
+    why: Load-test p95 latency, time-to-first-token and 429 behaviour
+  - id: presidio
+    week: w8
+    title: Microsoft Presidio
+    url: https://microsoft.github.io/presidio/
+    category: tool
+    type: Library
+    cost: Free
+    time: 1 h
+    priority: recommended
+    why: PII redaction inside the gateway
+  - id: ai-engineering-ch7-10
+    week: w8
+    title: AI Engineering, ch. 7, 9–10
+    url: https://www.oreilly.com/library/view/ai-engineering/9781098166298/
+    category: book
+    cost: Paid
+    time: 3 h
+    priority: recommended
+    why: Fine-tuning vs RAG; KV cache, batching, quantization
+
+  # Final days
+  - id: tech-interview-handbook
+    week: final
+    title: Tech Interview Handbook — behavioural
+    url: https://www.techinterviewhandbook.org
+    category: docs
+    type: Guide
+    cost: Free
+    time: 2 h
+    priority: must
+    why: STAR templates and question bank
+  - id: ai-engineering-field-guide
+    week: final
+    title: alexeygrigorev/ai-engineering-field-guide
+    url: https://github.com/alexeygrigorev/ai-engineering-field-guide
+    category: repo
+    cost: Free
+    time: 2 h
+    priority: must
+    verified_on: 2026-09-25
+    why: What 2026 AI-engineering loops and design rounds look like
+  - id: prachub-genai-design
+    week: final
+    title: PracHub — GenAI & LLM system design guide
+    url: https://prachub.com/resources/genai-llm-system-design-interview-guide-2026
+    category: essay
+    type: Article
+    cost: Free
+    time: 1 h
+    priority: recommended
+    why: GenAI system design interview prep
+
+checkpoints:
+  - { id: day-07-hub-live, day: 7, title: Hub live on the subdomain with the week 1 log }
+  - { id: day-14-evals-cost, day: 14, title: Eval set labelled; cost logging on }
+  - { id: day-28-core-1, day: 28, title: Core 1 live with a published eval report }
+  - { id: day-42-core-2, day: 42, title: "Core 2 demo video, traces and agent eval results" }
+  - { id: day-49-core-3, day: 49, title: Core 3 repo with architecture diagram and text-to-SQL accuracy on 20 questions }
+  - { id: day-54-core-4, day: 54, title: Core 4 load-test results; three mocks done }
+  - { id: day-60-ready, day: 60, title: "Resume, portfolio and 8 STAR stories updated" }
+
+projects:
+  - id: core-1
+    number: 1
+    title: '"Ask Sanket" RAG v2'
+    weeks: 2–4
+    summary: Hybrid search, reranking, citations, streaming and an eval harness, plus claim-level checks against cited chunks.
+    proves: Taking RAG from demo to measured quality
+    study: Supabase hybrid-search SQL (RRF), contextual-retrieval cookbook, Ragas or DeepEval, LLM-as-judge guide
+  - id: core-2
+    number: 2
+    title: RunCoach AI v2
+    weeks: 5–6
+    summary: MCP server for training data, multi-step planning with approval before any change, agent evals, tracing, cost per conversation.
+    proves: Moving from chatbot to reliable, observable agent
+    study: MCP 2026-07-28 spec and Python SDK, LangGraph interrupts, Langfuse, Filesystem reference server
+  - id: core-3
+    number: 3
+    title: Research Desk
+    weeks: "7"
+    summary: PDFs and reports → typed JSON with confidence → Delta tables → vector search, plus text-to-SQL.
+    proves: "Data + AI platform thinking: ingestion, governance, structured + unstructured retrieval"
+    study: Docling, Databricks Vector Search, Cortex Analyst quickstart
+  - id: core-4
+    number: 4
+    title: LLM Gateway + hardening
+    weeks: "8"
+    summary: Thin FastAPI gateway with routing, fallbacks, semantic cache, per-project budgets, PII redaction and a cost dashboard.
+    proves: "The architect layer: cost, latency, reliability, security"
+    study: LiteLLM router and spend schema, Portkey fallbacks, Presidio, k6
+
+deliverables: [README, Architecture diagram, Eval results, 2-minute demo video]
+
+readme_template:
+  - What problem, for whom, and why an LLM at all?
+  - Architecture diagram and the 2–3 key trade-offs
+  - "Eval method and before/after numbers: accuracy, faithfulness, p95 latency, cost per query"
+  - Failure modes found and how you handled them
+  - What you would change at 100× scale
+
+existing_projects:
+  - { name: Runfolio / RunCoach AI, what: Running portfolio; RAG + pgvector + streaming agent over running data, role: Core 2 }
+  - { name: Portfolio "Ask Sanket" RAG, what: Small RAG over the site database, role: Core 1 }
+  - { name: E20 ka Chakravyuh, what: Astro + React + D3 scrollytelling; Zod-validated data, role: Core 3 corpus }
+  - { name: The Dividend Question, what: Citation-driven data story with archived sources, role: Core 3 corpus }
+  - { name: AI Pune events directory, what: AI-extracted submissions into a review queue, role: Core 3 ingestion }
+  - { name: "Antyodaya, Yung Foundation, school PWA", what: Supabase full-stack; bilingual; offline-first, role: Data-modelling stories }
+
+ideas:
+  - { name: N1 Claim Checker, verdict: Folded into Core 1 eval harness }
+  - { name: N2 Document extraction, verdict: Folded into Core 3 ingestion }
+  - { name: N3 LLM Gateway, verdict: Merged into Core 4 }
+  - { name: N4 LoRA/QLoRA fine-tune, verdict: "Optional weekend (6–8 h), days 61–90" }
+  - { name: N5 Event-driven pipeline, verdict: Backlog; mention incremental re-embedding in Core 1 }
+  - { name: N6 GraphRAG, verdict: 3-hour spike in week 4 only }
+  - { name: N7 Kubernetes + Terraform + OTel, verdict: Backlog; deploy Core 4 as one small container }
+
+questions:
+  - id: rag-10m-acl
+    q: Design RAG over 10M documents with per-user access control.
+    points:
+      - Store ACLs as chunk metadata at ingestion; filter inside the vector query, not after it
+      - Hybrid BM25 + vector retrieval, then rerank; cite chunks in the answer
+      - Shard indexes by tenant; incremental re-embedding with a hash per chunk
+      - Evaluate per tenant; budget embedding and query cost
+  - id: rag-vs-long-context
+    q: "RAG vs long context vs fine-tuning: when is each right?"
+    points:
+      - "Under ~200k tokens of stable content: long context with prompt caching"
+      - "Large or changing corpus that needs citations: RAG"
+      - "Narrow task needing format, style or lower latency: fine-tune"
+      - "Often combined: RAG for facts, a small tuned model for format"
+  - id: eval-rag
+    q: How do you evaluate a RAG system, and how do you know your judge is right?
+    points:
+      - Start with error analysis on real traces
+      - "Labelled set by type: factual, multi-hop, not in corpus, adversarial"
+      - Score retrieval (recall@k) separately from answers (faithfulness)
+      - Calibrate the judge on your own labels; binary scores; track agreement
+  - id: safe-agent
+    q: Design an agent that takes real actions safely.
+    points:
+      - Plan first, then human approval before any side effect
+      - Least-privilege tools with scoped credentials
+      - Idempotency keys on every write
+      - Trace each step; cap steps, time and spend
+  - id: mcp-vs-functions
+    q: MCP vs plain function calling.
+    points:
+      - "Function calling: tools defined inside one app"
+      - "MCP: a standard protocol, servers reusable across clients"
+      - "2026-07-28 spec: stateless core, no session handshake"
+      - Large tool catalogues bloat context; load tools on demand
+  - id: cut-cost-60
+    q: Cut LLM cost by 60% without losing quality.
+    points:
+      - Measure cost per request first
+      - Prompt caching and batch APIs
+      - Route easy queries to smaller models
+      - Semantic cache and tighter context
+  - id: prompt-injection
+    q: Prompt-injection defences for tool-using agents.
+    points:
+      - Treat all tool output and retrieved text as untrusted data
+      - "Split privileges: a reading agent cannot write"
+      - Allow-lists and approval for risky actions
+      - Map controls to OWASP LLM and Agentic Top 10
+  - id: semantic-cache
+    q: "Semantic cache: what to cache, and how to invalidate it."
+    points:
+      - Match on embedding similarity with a strict threshold
+      - Key on model, prompt version and user scope
+      - TTL plus invalidation when source documents change
+      - Skip personalised and tool-using answers
+  - id: llm-gateway
+    q: Multi-tenant LLM gateway with per-team budgets.
+    points:
+      - Auth → tenant → budget check → route → provider
+      - Per-team budgets, rate limits and a spend ledger
+      - Fallbacks and retries with timeouts
+      - PII redaction, logging and a cost dashboard
+  - id: text-to-sql
+    q: "Text-to-SQL: accuracy and safety."
+    points:
+      - Semantic model or a curated schema prompt
+      - Read-only role, row limits, allow-listed tables
+      - Validate SQL before running it
+      - Measure accuracy on a fixed question set
+  - id: observability
+    q: "Observability: what goes in a trace, and which SLOs?"
+    points:
+      - Prompt, retrieved chunks, tool calls, tokens, cost, latency
+      - "SLOs: p95 latency, time to first token, error rate, cost per request"
+      - Online evals on sampled traffic
+      - Link traces back to eval datasets
+  - id: streaming-latency
+    q: "Latency budget for streaming chat: time to first token vs total time."
+    points:
+      - Time to first token drives perceived speed
+      - "Split the budget: retrieval, rerank, first token, stream"
+      - Parallelise retrieval, cache, use smaller rerankers
+      - Track p95, not averages
+
+dsa:
+  - { id: arrays, label: Arrays and hashing, target: 8 }
+  - { id: two-pointers, label: Two pointers, target: 6 }
+  - { id: sliding-window, label: Sliding window, target: 6 }
+  - { id: stack, label: Stack, target: 6 }
+  - { id: heap, label: Heap, target: 5 }
+  - { id: trees, label: Trees, target: 8 }
+  - { id: graphs, label: Graphs / BFS, target: 7 }
+  - { id: intervals, label: Intervals, target: 4 }
+
+mocks:
+  - { id: genai-design, title: GenAI system design, when: Week 8 }
+  - { id: classic-design, title: Classic system design, when: Week 8 }
+  - { id: lld, title: Low-level design, when: Week 8 }
+  - { id: behavioural, title: Behavioural, when: Day 57 }
+
+interview_loops:
+  - Higher system-design bar, LLM-infrastructure prompts inside general loops, and cost graded explicitly.
+  - "Indian GenAI roles: screening, 1–2 technical rounds with live coding and GenAI architecture, then managerial and HR."
+  - Product companies usually still run 1–2 LeetCode-medium rounds; GCC architect loops weight design, cloud and project deep dives.
+
+# Eight slots. A sample fills its slot until the user writes their own story.
+stars:
+  - id: s1
+    prompt: A project you owned end to end
+    sample:
+      title: Shipping a streaming coach agent
+      tags: Ownership · Technical depth
+      s: A running portfolio needed a coach that could answer questions over months of training data.
+      t: Build RAG plus a streaming agent without a separate backend team.
+      a: Chose pgvector over a separate vector store, streamed tokens to the client, retrieved over training logs.
+      r: "Replace with your number: latency, usage or eval score."
+  - id: s2
+    prompt: A quality vs speed trade-off
+    sample:
+      title: A review queue for AI-extracted submissions
+      tags: Judgement · Quality
+      s: A community events directory received messy submissions.
+      t: Cut manual entry time without letting bad data through.
+      a: AI extraction into a typed schema, with every result routed to a human review queue.
+      r: "Replace with your number: minutes saved per submission, error rate."
+  - { id: s3, prompt: A time you raised a quality metric }
+  - { id: s4, prompt: A failure and what you changed afterwards }
+  - { id: s5, prompt: Disagreeing with a technical decision }
+  - { id: s6, prompt: Working through ambiguous requirements }
+  - { id: s7, prompt: A cost or latency win }
+  - { id: s8, prompt: Delivering under a fixed deadline }
+
+costs:
+  - { item: Hub hosting (Cloudflare), cost: $0, note: Static site }
+  - { item: Cloudflare AI Search, cost: $0 in beta, note: "20,000 queries/month on Workers Free" }
+  - { item: LLM APIs, cost: ~$10–15/month, note: Gemini free tier + one paid provider. Hard caps }
+  - { item: Local models + CPU rerankers, cost: $0, note: Cheap prompt and retrieval iteration }
+  - { item: Supabase (Core 1 + hub progress), cost: $0, note: Free plan }
+  - { item: "Langfuse, promptfoo, k6, Presidio", cost: $0, note: Open source }
+  - { item: Databricks Free Edition, cost: $0, note: Non-commercial; week 7 limits apply }
+  - { item: Snowflake trial, cost: $0, note: $400 credits or 30 days. Start on day 43 }
+  - { item: Books, cost: "~₹1,900 + AI Engineering", note: The only two paid items worth buying }
+
+# tag: Standard | Spec | Security | Tooling | Acquisition
+ecosystem:
+  - { date: 3 Aug 2026, tag: Standard, title: OWASP Top 10 for LLM Applications 2026, meaning: Use it instead of the 2025 list; excessive agency and unbounded consumption moved up, url: "https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/" }
+  - { date: 28 Jul 2026, tag: Spec, title: MCP spec 2026-07-28, meaning: Stateless core; build Core 2 against it, url: "https://blog.modelcontextprotocol.io/posts/2026-07-28/" }
+  - { date: Jun 2026, tag: Tooling, title: TensorZero repository archived, meaning: Don't choose it for the gateway }
+  - { date: 29 May 2026, tag: Acquisition, title: Palo Alto Networks closed its Portkey acquisition, meaning: Gateway still open source (Apache-2.0) }
+  - { date: Mar 2026, tag: Acquisition, title: OpenAI to acquire Promptfoo, meaning: Promptfoo stays open source, url: "https://openai.com/index/openai-to-acquire-promptfoo/" }
+  - { date: Mar 2026, tag: Security, title: LiteLLM supply-chain advisory and exploited SQL injection, meaning: Pin versions; a good "supply chain" interview story }
+  - { date: Jan 2026, tag: Acquisition, title: ClickHouse acquired Langfuse, meaning: Still MIT and self-hostable, url: "https://clickhouse.com/blog/clickhouse-acquires-langfuse-open-source-llm-observability" }
+  - { date: Dec 2025, tag: Standard, title: OWASP Top 10 for Agentic Applications, meaning: Use for agents with tools and memory, url: "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/" }
+  - { date: Ongoing, tag: Tooling, title: Databricks Free Edition excludes Agent Bricks, meaning: Use Mosaic AI Agent Framework + MLflow in notebooks }
+  - { date: Ongoing, tag: Tooling, title: anthropics/courses still uses Claude 3 Haiku, meaning: Swap in current model IDs }
