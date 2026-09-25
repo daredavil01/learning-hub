@@ -59,8 +59,16 @@ Connect the GitHub repository in Cloudflare (Workers & Pages → Create → impo
 
 - Build command: `npm run build`
 - Output directory: `dist`
-- Environment variables: `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - Custom domain: `learn.sankettambare.in`
+
+Set the Supabase values from `.env` with wrangler, so they never appear in a terminal or chat (repeat with `--env preview` for preview builds):
+
+```bash
+node --env-file=.env -e "process.stdout.write(process.env.PUBLIC_SUPABASE_URL)" | npx wrangler pages secret put PUBLIC_SUPABASE_URL --project-name learning-hub
+node --env-file=.env -e "process.stdout.write(process.env.PUBLIC_SUPABASE_PUBLISHABLE_KEY)" | npx wrangler pages secret put PUBLIC_SUPABASE_PUBLISHABLE_KEY --project-name learning-hub
+```
+
+Every push to `main` then builds and deploys. Cloudflare installs with its own npm (10.x), so if you regenerate `package-lock.json`, check it with `npx npm@10.9.2 ci --dry-run`.
 
 The site is static and uses hash routes (`#/resources`), so no server fallback is needed.
 

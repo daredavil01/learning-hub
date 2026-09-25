@@ -24,6 +24,10 @@ All notable changes to this project. Format: [Keep a Changelog](https://keepacha
 - Logo: a progress ring (the 60 days) around a hub joining the three tracks. `public/logo.svg` (mark + wordmark, text outlined to paths so it looks right without the fonts), `public/favicon.svg` (mark), and the same mark in the header (`LogoMark` in `ui.tsx`).
 - Today links resources: the learn block's title opens its resource in a new tab, and a "Resources this week" panel lists the week's resources with links, done ticks and "Open in library".
 
+### Fixed
+
+- Cloudflare Pages build: `package-lock.json` regenerated with npm 10 so `npm ci` passes on Cloudflare (npm 10.9.2) and locally (npm 11).
+
 ### Changed
 
 - Navigation: the header shows only Today, Dashboard, Plan and Resources. The "More" dropdown is gone; the menu button opens every page in the same five groups (a side panel on desktop, full screen on phones).
